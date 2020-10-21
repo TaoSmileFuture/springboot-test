@@ -1,0 +1,68 @@
+#配置文件加载顺序 yml-->yaml-->properties 后加载文件属性覆盖先加载文件属性
+projectName: springboot-qulick
+
+server:
+  port: 8080
+  servlet:
+    context-path: /dome
+
+student:
+  one:
+    name: 张三
+    age: 18
+
+students:
+  - name: 张三
+    age: 18
+  - name: 李四
+    age: 19
+
+# DataSource Config
+spring:
+  datasource:
+    driver-class-name: oracle.jdbc.driver.OracleDriver
+    url: jdbc:oracle:thin:@//localhost:1521/orcl
+    username: scott
+    password: 123456
+  #JPA Configuration
+  jpa:
+    database: oracle
+    hibernate:
+      #每次启动实体与表的映射处理
+      ddl-auto: update
+    show-sql: true
+    generate-ddl: true
+    #方言设置
+    database-platform: org.hibernate.dialect.Oracle10gDialect
+  redis:
+    #Reis cluster Config
+#    cluster:
+#      nodes: 127.0.0.1:6379,127.0.0.1:6380,127.0.0.1:6381
+    #数据库索引，默认0 初始化后不能修改库
+    database: 0
+#    jedis:
+#      pool:
+#        #连接池最大连接数（负值标识没有限制）
+#        max-active: 300
+#        #最大堵塞时间（负值标识没有限制）单位ms
+#        max-idle: -1
+#        #最大空闲连接数
+#        max-wait: 100
+#        #最小空闲连接数
+#        min-idle: 20
+    #连接redis超时时间 单位ms
+    timeout: 6000
+    #Reis Config
+    host: 127.0.0.1
+    port: 6379
+
+#springboot 集成mybaits
+mybatis:
+  #mybatis映射文件查找路径
+  mapper-locations: classpath:mapper/*Mapper*.xml
+  #pojo类别名扫描包路径
+  type-aliases-package: com.zhenglt.springboot.pojo
+
+
+
+
