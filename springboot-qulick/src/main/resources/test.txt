@@ -1,3 +1,8 @@
 create file working（工作区） 文件是红色
 add to stage（暂存区） 文件是绿色
 update file 文件是蓝色
+New Branch 创建一个新分支
+Local Branches 本地仓库分支列表
+Remotes Branches 远程仓库分支列表
+点击分支选中CheckOut切换分支
+master add
