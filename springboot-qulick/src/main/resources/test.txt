@@ -1,0 +1,2 @@
+create file working（工作区） 文件是红色
+add to stage（暂存区） 文件是绿色
