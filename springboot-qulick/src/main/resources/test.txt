@@ -6,3 +6,4 @@ Local Branches 本地仓库分支列表
 Remotes Branches 远程仓库分支列表
 点击分支选中CheckOut切换分支
 master add
+dev add
