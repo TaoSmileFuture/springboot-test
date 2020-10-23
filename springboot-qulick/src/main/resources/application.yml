@@ -10,6 +10,8 @@ student:
   one:
     name: 张三
     age: 18
+    # ${property name}获取配置文件指定属性名对应值
+    toString: ${student.one.name}--${student.one.age}
 
 students:
   - name: 张三

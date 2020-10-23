@@ -1,5 +1,7 @@
 package com.zhenglt.springboot.controller;
 
+import com.zhenglt.springboot.configBean.UserConfig;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Controller;
@@ -13,33 +15,42 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @Date 20/10/19 15:13
  **/
 @Controller
-@ConfigurationProperties(prefix = "student")
+@ConfigurationProperties(prefix = "student.one")
 public class QuickController {
 
 //    @Value("${projectName}")
 //    private String projectName;
 
-//    @Value("${student.name}")
+//    @Value("${student.one.name}")
 //    private String studentName;
 
-//    @Value("${student.age}")
+//    @Value("${student.one.age}")
 //    private Integer studentAge;
 
-    private String name;
-    private Integer age;
+//    private String name;
+//    private Integer age;
+//    private String toString;
+//
+//    public void setName(String name) {
+//        this.name = name;
+//    }
+//
+//    public void setAge(Integer age) {
+//        this.age = age;
+//    }
+//
+//    public void setToString(String toString) {
+//        this.toString = toString;
+//    }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setAge(Integer age) {
-        this.age = age;
-    }
+    @Autowired
+    private UserConfig userConfig;
 
     @RequestMapping("/quick")
     @ResponseBody
     public String quick(){
 
-        return "studentName:"+name+",studentAge:"+age;
+//        return "studentName:"+name+",studentAge:"+age+",toString:"+toString;
+        return "studentName:"+userConfig.getName()+",studentAge:"+userConfig.getAge()+",toString:"+userConfig.getToString();
     }
 }
