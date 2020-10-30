@@ -12,7 +12,7 @@ import java.util.List;
  * @Date 20/10/20 11:22
  *  mapper不添加改注解时，引导类必须添加包扫描注解(MapperScan)
  **/
-//@Mapper
+@Mapper
 public interface UserMapper {
 
     List<UserBean> findAll();

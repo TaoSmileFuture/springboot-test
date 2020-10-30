@@ -1,8 +1,8 @@
 package com.zhenglt.springboot;
 
-import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
@@ -13,10 +13,12 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  *  SpringBootApplication 声明该类是一个spingboot引导类
  *  MapperScan mabits的mapper接口上不添加@mapper注解时，使用包扫描模式
  *  EnableTransactionManagement 开启事务
+ *  EnableAspectJAutoProxy 开启aop
  **/
 @SpringBootApplication
-@MapperScan(value = {"com.zhenglt.springboot.mapper","com.zhenglt.springboot.mapper1"})
+//@MapperScan(value = {"com.zhenglt.springboot.mapper","com.zhenglt.springboot.mapper1"})
 @EnableTransactionManagement
+@EnableAspectJAutoProxy
 public class MySpringBootApplication {
 
     public static void main(String[] args) {
