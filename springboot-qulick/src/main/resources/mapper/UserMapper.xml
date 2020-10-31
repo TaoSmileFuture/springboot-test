@@ -6,4 +6,7 @@
       select * from t_user_info
     </select>
 
+    <select id="findByUserId" resultType="userBean" parameterType="string">
+        select * from t_user_info where userid=#{userId,jdbcType=VARCHAR}
+    </select>
 </mapper>

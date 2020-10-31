@@ -21,10 +21,10 @@ public class UserBean {
 
     @Id
 //    根据数据库自动生成
-    @GeneratedValue(strategy = GenerationType.AUTO)
+//    @GeneratedValue(strategy = GenerationType.AUTO)
 //    uuid
-//    @GeneratedValue(generator = "uuid")
-//    @GenericGenerator(name = "uuid",strategy = "uuid")
+    @GeneratedValue(generator = "uuid")
+    @GenericGenerator(name = "uuid",strategy = "uuid")
     @Column(length = 200)
     private String id;
 
@@ -33,4 +33,13 @@ public class UserBean {
 
     @Column(length = 3)
     private Integer age;
+
+    @Column(length = 400)
+    private String userid;
+
+    @Column(length = 400)
+    private String password;
+
+    @Column(length = 1)
+    private String flag;
 }
