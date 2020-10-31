@@ -57,6 +57,10 @@ spring:
     #Reis Config
     host: 127.0.0.1
     port: 6379
+  thymeleaf:
+    cache: false #关闭缓存，默认true
+    prefix: classpath:/templates/
+    suffix: .html
 
 #springboot 集成mybaits
 mybatis:

@@ -1,0 +1,152 @@
+1、语法说明：
+    Thymeleaf通过${}来获取model中的变量，注意这不是el表达式，而是ognl表达式。
+
+2、变量_动静结合：
+    1）指令
+        Thymeleaf中所有的表达式都需要写在"指令"中，指令是HTML5中的自定义属性，在Thymeleaf中所有指令都是以th:开头。
+    因为表达式${user.name}是写在自定义属性中，因此在静态环境下，表达式的内容会被当做是普通字符串，浏览器会自动忽略这些指令，这样就不会报错了。
+    2）向下兼容
+        如果不支持这种th:的命名空间写法，那么可以把th:text换成 data-th-text，Thymeleaf也可以兼容。
+    3）另外
+        th:text指令出于安全考虑，会把表达式读取到的值进行处理，防止html的注入。
+        例如，<p>你好</p>将会被格式化输出为$lt;p$gt;你好$lt;/p$lt;。
+        如果想要不进行格式化输出，而是要输出原始内容，则使用th:utext来代替.
+
+3、变量_自定义变量
+    案例：
+        <h2>
+            <p>Name: <span th:text="${user.name}">Jack</span>.</p>
+            <p>Age: <span th:text="${user.age}">21</span>.</p>
+            <p>friend: <span th:text="${user.friend.name}">Rose</span>.</p>
+        </h2>
+    自定义变量后：
+        <h2 th:object="${user}">
+            <p>Name: <span th:text="*{name}">Jack</span>.</p>
+            <p>Age: <span th:text="*{age}">21</span>.</p>
+            <p>friend: <span th:text="*{friend.name}">Rose</span>.</p>
+        </h2>
+    说明：
+        首先在 h2上 用 th:object="${user}"获取user的值，并且保存。
+        然后，在h2内部的任意元素上，可以通过 *{属性名}的方式，来获取user中的属性，这样就省去了大量的user.前缀了
+
+4、方法
+    1）ognl表达式本身就支持方法调用，例如：
+        <h2 th:object="${user}">
+            <p>FirstName: <span th:text="*{name.split(' ')[0]}">Jack</span>.</p>
+            <p>LastName: <span th:text="*{name.split(' ')[1]}">Li</span>.</p>
+        </h2>
+    2）Thymeleaf内置对象
+        1.一些环境相关对象
+            对象	        作用
+            #ctx	        获取Thymeleaf自己的Context对象
+            #requset	    如果是web程序，可以获取HttpServletRequest对象
+            #response	    如果是web程序，可以获取HttpServletReponse对象
+            #session	    如果是web程序，可以获取HttpSession对象
+            #servletContext	如果是web程序，可以获取HttpServletContext对象
+        2.Thymeleaf提供的全局对象：
+            对象	        作用
+            #dates	        处理java.util.date的工具对象
+            #calendars	    处理java.util.calendar的工具对象
+            #numbers	    用来对数字格式化的方法
+            #strings	    用来处理字符串的方法
+            #bools	        用来判断布尔值的方法
+            #arrays	        用来护理数组的方法
+            #lists	        用来处理List集合的方法
+            #sets	        用来处理set集合的方法
+            #maps	        用来处理map集合的方法
+            案例：
+                <p>
+                  今天是: <span th:text="${#dates.format(today,'yyyy-MM-dd')}">2018-04-25</span>
+                </p>
+
+5、方法_字面值
+    我们需要在指令中填写基本类型如：字符串、数值、布尔等，并不希望被Thymeleaf解析为变量，这个时候称为字面值。
+    1）字符串字面值
+        使用一对'引用的内容就是字符串字面值了：
+         <p>
+           你正在观看 <span th:text="'thymeleaf'">template</span> 的字符串常量值.
+         </p>
+    2）数字字面值
+        数字不需要任何特殊语法， 写的什么就是什么，而且可以直接进行算术运算
+        <p>今年是 <span th:text="2018">1900</span>.</p>
+        <p>两年后将会是 <span th:text="2018 + 2">1902</span>.</p>
+    3）布尔字面值
+        布尔类型的字面值是true或false：
+        <div th:if="true">
+            你填的是true
+        </div>
+
+6、方法_拼接
+    1）我们经常会用到普通字符串与表达式拼接的情况：
+        <span th:text="'欢迎您:' + ${user.name} + '!'"></span>
+    2）字符串字面值需要用''，拼接起来非常麻烦，Thymeleaf对此进行了简化，使用一对|即可：
+        <span th:text="|欢迎您:${user.name}|"></span>
+
+7、运算
+    需要注意：${}内部的是通过OGNL表达式引擎解析的，外部的才是通过Thymeleaf的引擎解析，因此运算符尽量放在${}外进行。
+    1）算术运算
+        支持的算术运算符：+ - * / %
+        <span th:text="${user.age}"></span>         //21
+        <span th:text="${user.age}%2 == 0"></span>  //false
+    2）比较运算
+        支持的比较运算：>, <, >= and <= ，但是>, <不能直接使用，因为xml会解析为标签，要使用别名。
+        注意 == and !=不仅可以比较数值，类似于equals的功能。
+        可以使用的别名：gt (>), lt (<), ge (>=), le (<=), not (!). Also eq (==), neq/ne (!=).
+    3）条件运算
+        1.三元运算
+            <span th:text="${user.sex} ? '男':'女'"></span>
+        2.默认值
+            有的时候，我们取一个值可能为空，这个时候需要做非空判断，可以使用 表达式 ?: 默认值简写：
+            <span th:text="${user.name} ?: '二狗'"></span>
+            当前面的表达式值为null时，就会使用后面的默认值。
+            注意：?:之间没有空格。
+
+8、循环
+    1）样例
+        <tr th:each="user,stat : ${users}">
+            <td th:text="${user.name}">Onions</td>
+            <td th:text="${user.age}">2.41</td>
+        </tr>
+    2）stat对象包含以下属性：
+        index，从0开始的角标
+        count，元素的个数，从1开始
+        size，总元素个数
+        current，当前遍历到的元素
+        even/odd，返回是否为奇偶，boolean值
+        first/last，返回是否为第一或最后，boolean值
+
+9、逻辑判断
+    1）Thymeleaf中使用th:if 或者 th:unless ，两者的意思恰好相反。
+        <span th:if="${user.age} > 24">老油条</span>
+        如果表达式的值为true，则标签会渲染到页面，否则不进行渲染。
+
+    2）以下情况被认定为true：
+        表达式值为true
+        表达式值为非0数值
+        表达式值为非0字符
+        表达式值为字符串，但不是"false","no","off"
+        表达式不是布尔、字符串、数字、字符中的任何一种
+        其它情况包括null都被认定为false
+
+10、分支控制switch
+   这里要使用两个指令：th:switch 和 th:case
+       <div th:switch="${user.role}">
+         <p th:case="'admin'">用户是管理员</p>
+         <p th:case="'manager'">用户是经理</p>
+         <p th:case="*">用户是别的玩意</p>
+       </div>
+       需要注意的是，一旦有一个th:case成立，其它的则不再判断。与java中的switch是一样的。
+       另外th:case="*"表示默认，放最后。
+
+11、JS模板
+   1）模板引擎不仅可以渲染html，也可以在JS中的进行预处理。而且为了在纯静态环境下可以运行，其Thymeleaf代码可以被注释起来：
+       <script th:inline="javascript">
+           const user = /*[[${user}]]*/ {};
+           const age = /*[[${user.age}]]*/ 20;
+           console.log(user);
+           console.log(age)
+       </script>
+       在script标签中通过th:inline="javascript"来声明这是要特殊处理的js脚本
+   2)语法结构：
+       const user = /*[[Thymeleaf表达式]]*/ "静态环境下的默认值";
+       因为Thymeleaf被注释起来，因此即便是静态环境下， js代码也不会报错，而是采用表达式后面跟着的默认值。且User对象会被直接处理为json格式。

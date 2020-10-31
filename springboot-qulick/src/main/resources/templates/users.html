@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>users</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" th:href="@{/css/style.css}" type="text/css">
+</head>
+<body>
+    <table>
+		<tr>
+			<th>no</th>
+			<th>name</th>
+			<th>age</th>
+		</tr>
+        <!--循环-->
+		<tr th:each="user,stat : ${userList}">
+		   <td th:text="${stat.count}">xx</td>
+		   <td th:text="${user.name}">xx</td>
+		   <td th:text="${user.age}">xx</td>
+		</tr>
+        <!--自定义变量-->
+		<tr th:object="${userList[0]}">
+			<td th:text="3">xx</td>
+			<td th:text="*{name}">xx</td>
+			<td th:text="*{age}">xx</td>
+		</tr>
+        <!--方法，拼接-->
+        <tr th:object="${userList[0]}">
+            <td th:text="4">xx</td>
+            <td th:text="*{name.split(' ')[0]}+'，'+*{name.split(' ')[1]}">xx</td>
+            <td th:text="|*{name.split(' ')[0]}，*{name.split(' ')[1]}|">xx</td>
+        </tr>
+    </table>
+</body>
+</html>
