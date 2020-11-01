@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhenglt.springboot.mapper.PermissionMapper">
+
+    <select id="findByUserId" resultType="PermissionBean" parameterType="string">
+        SELECT p.*
+          FROM T_USER_INFO T
+          LEFT JOIN T_USER_ROLE UR
+            ON (T.ID = UR.U_ID)
+          LEFT JOIN T_ROLE R
+            ON (UR.RID = R.ID)
+          LEFT JOIN t_role_permission rp
+            ON (r.id=rp.rid)
+            LEFT JOIN t_permission P
+            ON (rp.pid=P.id)
+         WHERE T.USERID = #{userId,jdbcType=VARCHAR}
+    </select>
+</mapper>
